@@ -1,0 +1,32 @@
+# fly.toml - Worker BR-1
+# --------------------------------------------------------
+app = "watchit-worker-br1"
+primary_region = "gru"
+
+[build]
+
+[env]
+  HOSTS_RESOLVER = "system"
+  NODE_ENV = "production"
+  REGION = "BR-1"
+
+# Definição dos processos
+[processes]
+  worker_ingame = "npm run worker:inGame"
+  worker_matchdetail = "npm run worker:matchDetail"
+
+# Configuração das VMs
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024
+
+[[services]]
+  processes = ["worker_ingame"]
+  internal_port = 8080
+  protocol = "tcp"
+
+[[services]]
+  processes = ["worker_matchdetail"]
+  internal_port = 8081
+  protocol = "tcp"
